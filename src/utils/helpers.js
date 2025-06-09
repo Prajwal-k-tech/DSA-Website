@@ -203,8 +203,8 @@ export const performance = {
 // Storage helpers for direct import
 export const getStorageItem = (key, type = 'local') => {
   try {
-    const storage = type === 'session' ? sessionStorage : localStorage;
-    const value = storage.getItem(key);
+    const storageObj = type === 'session' ? window.sessionStorage : window.localStorage;
+    const value = storageObj.getItem(key);
     return value === null ? null : value;
   } catch (error) {
     console.error(`Error getting ${key} from ${type} storage:`, error);
@@ -214,8 +214,8 @@ export const getStorageItem = (key, type = 'local') => {
 
 export const setStorageItem = (key, value, type = 'local') => {
   try {
-    const storage = type === 'session' ? sessionStorage : localStorage;
-    storage.setItem(key, value);
+    const storageObj = type === 'session' ? window.sessionStorage : window.localStorage;
+    storageObj.setItem(key, value);
     return true;
   } catch (error) {
     console.error(`Error setting ${key} in ${type} storage:`, error);
@@ -225,8 +225,8 @@ export const setStorageItem = (key, value, type = 'local') => {
 
 export const removeStorageItem = (key, type = 'local') => {
   try {
-    const storage = type === 'session' ? sessionStorage : localStorage;
-    storage.removeItem(key);
+    const storageObj = type === 'session' ? window.sessionStorage : window.localStorage;
+    storageObj.removeItem(key);
     return true;
   } catch (error) {
     console.error(`Error removing ${key} from ${type} storage:`, error);

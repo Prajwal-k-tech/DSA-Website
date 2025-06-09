@@ -532,27 +532,29 @@ class PathfindingVisualizer extends Component {
         
         {/* Grid */}
         <table>
-          {this.state.grid.map((row, rowIndex) => (
-            <tr key={rowIndex} style={{ display: "table-row" }}>
-              {row.map((node, nodeIndex) => (
-                <Node
-                  key={nodeIndex}
-                  value={node}
-                  isWall={node.isWall}
-                  isStart={node.isStart}
-                  isEnd={node.isEnd}
-                  isVisited={node.isVisited}
-                  isShortestPath={node.isShortestPath}
-                  row={rowIndex}
-                  col={nodeIndex}
-                  onMouseDown={this.handleMouseDown}
-                  onMouseEnter={this.handleMouseEnter}
-                  onMouseUp={this.handleMouseUp}
-                  onMouseLeave={this.handleMouseLeave}
-                />
-              ))}
-            </tr>
-          ))}
+          <tbody>
+            {this.state.grid.map((row, rowIndex) => (
+              <tr key={rowIndex} style={{ display: "table-row" }}>
+                {row.map((node, nodeIndex) => (
+                  <Node
+                    key={nodeIndex}
+                    value={node}
+                    isWall={node.isWall}
+                    isStart={node.isStart}
+                    isEnd={node.isEnd}
+                    isVisited={node.isVisited}
+                    isShortestPath={node.isShortestPath}
+                    row={rowIndex}
+                    col={nodeIndex}
+                    onMouseDown={this.handleMouseDown}
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseUp={this.handleMouseUp}
+                    onMouseLeave={this.handleMouseLeave}
+                  />
+                ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
         
         {/* Info Panel */}

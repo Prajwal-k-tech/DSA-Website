@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Editor from "@monaco-editor/react";
+import { MEMORY_POOL_SIZE } from '../../../constants';
 
 const CodeViewer = ({ code, onChange }) => {
   const editorRef = useRef(null);

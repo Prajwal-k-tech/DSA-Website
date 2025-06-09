@@ -16,11 +16,15 @@ const LinkedListVisualizer = ({ nodes = [], onNodesChange, onMemoryPoolInit }) =
       inUse: false,
       index
     }));
+    return pool;
+  });
+
+  // Initialize memory pool addresses in parent component
+  useEffect(() => {
     if (onMemoryPoolInit) {
       onMemoryPoolInit(MEMORY_ADDRESSES);
     }
-    return pool;
-  });
+  }, [onMemoryPoolInit]);
 
   // State for inputs and UI
   const [inputValue, setInputValue] = useState('');
