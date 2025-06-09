@@ -654,7 +654,7 @@ const SortingVisualizer = () => {
   const [showError, setShowError] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showCodePanel, setShowCodePanel] = useState(true); // Always show by default
-  const [currentStep, setCurrentStep] = useState(""); // Current algorithm step description
+  const [currentStep, setCurrentStep] = useState("Select an algorithm and press 'Sort' to start visualization"); // Initialize with default message
   const [currentLine, setCurrentLine] = useState(0); // Current highlighted line in the code
   const [isPaused, setIsPaused] = useState(false);
   const [showCustomInput, setShowCustomInput] = useState(false);
@@ -689,6 +689,7 @@ const SortingVisualizer = () => {
     setLength(size);
     setArray(arr);
     setShowError(false);
+    setCurrentStep("Array generated. Select an algorithm and press 'Sort' to start visualization");
   }, []);
 
   // Debounced randomize function for better performance
@@ -744,6 +745,7 @@ const SortingVisualizer = () => {
       setArray(newArray);
       setShowCustomInput(false);
       setCustomInput('');
+      setCurrentStep("Custom array loaded. Select an algorithm and press 'Sort' to start visualization");
     } catch (error) {
       setShowError(true);
       setCurrentStep('Please enter valid numbers separated by commas');
@@ -757,6 +759,7 @@ const SortingVisualizer = () => {
   const handleAlgorithmSelect = useCallback((algorithm) => {
     setMethod(algorithm);
     setDropdownOpen(false);
+    setCurrentStep(`${algorithm} selected. Press 'Sort' to start visualization`);
   }, []);
 
   // Optimized animation update function with better performance
@@ -770,6 +773,7 @@ const SortingVisualizer = () => {
       }
       setIsAnimating(false);
       setIsPaused(false);
+      setCurrentStep("Sorting completed!");
       return;
     }
 
@@ -844,7 +848,7 @@ const SortingVisualizer = () => {
     animationState.current = { index: 0, results: [] };
     setIsAnimating(false);
     setIsPaused(false);
-    setCurrentStep("");
+    setCurrentStep("Sorting stopped. Select an algorithm and press 'Sort' to start visualization");
     setCurrentLine(null);
     createArray(length);
   }, [length, createArray]);
@@ -856,14 +860,16 @@ const SortingVisualizer = () => {
           cancelAnimationFrame(animationFrame.current);
           animationFrame.current = null;
         }
+        setCurrentStep(prevStep => `Paused: ${prevStep}`);
       } else { // If we're resuming
+        setCurrentStep(prevStep => prevStep.replace("Paused: ", ""));
         requestAnimationFrame(() => {
           setTimeout(updateAnimation, speed);
         });
       }
       return !prev;
     });
-  }, [speed]);
+  }, [speed, updateAnimation]);
 
   const handleSort = useCallback(() => {
     if (isAnimating && !isPaused) return;
@@ -878,7 +884,11 @@ const SortingVisualizer = () => {
 
     if (method === "Select Algorithm") {
       setShowError(true);
-      setTimeout(() => setShowError(false), 3000);
+      setCurrentStep("Please select an algorithm first!");
+      setTimeout(() => {
+        setShowError(false);
+        setCurrentStep("Select an algorithm and press 'Sort' to start visualization");
+      }, 3000);
       return;
     }
 
@@ -911,7 +921,11 @@ const SortingVisualizer = () => {
           break;
         default:
           setShowError(true);
-          setTimeout(() => setShowError(false), 3000);
+          setCurrentStep("Invalid algorithm selected");
+          setTimeout(() => {
+            setShowError(false);
+            setCurrentStep("Select an algorithm and press 'Sort' to start visualization");
+          }, 3000);
           return;
       }
 
@@ -923,9 +937,9 @@ const SortingVisualizer = () => {
       console.error('Sorting error:', error);
       setIsAnimating(false);
       setCurrentStep("Error occurred during sorting");
-      setTimeout(() => setCurrentStep(""), 3000);
+      setTimeout(() => setCurrentStep("Select an algorithm and press 'Sort' to start visualization"), 3000);
     }
-  }, [isAnimating, isPaused, method, array, length, speed]);
+  }, [isAnimating, isPaused, method, array, length, speed, updateAnimation]);
 
   useEffect(() => {
     createArray();
@@ -936,7 +950,7 @@ const SortingVisualizer = () => {
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [createArray, isAnimating]);
 
   return (
     <div className="sorting-container">
@@ -1001,7 +1015,7 @@ const SortingVisualizer = () => {
           <div className="step-display">
             <h4>Current Operation:</h4>
             <div className={`step-description ${isAnimating ? 'active-step' : ''}`}>
-              {currentStep || "Select an algorithm and press 'Sort' to start visualization"}
+              {currentStep}
             </div>
             
             {/* Learn More section - moved from bottom info panel */}
