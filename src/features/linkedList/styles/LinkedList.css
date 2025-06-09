@@ -448,3 +448,23 @@ input.invalid {
   background-color: rgba(255, 69, 58, 0.1) !important;
   box-shadow: 0 0 0 1px #ff453a !important;
 }
+
+/* Remove React icons */
+.controls button svg,
+.controls button i,
+.home-button svg,
+.error-message svg,
+svg {
+  display: none !important;
+}
+
+/* Missing keyframe animations */
+@keyframes waveGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes twinkling {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-100px); }
+}
